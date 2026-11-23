@@ -1,0 +1,9 @@
+// Schema do Prisma — as tabelas do salão entram aqui no próximo passo.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: salao-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: salao
+      POSTGRES_PASSWORD: salao123
+      POSTGRES_DB: salao
+    ports:
+      - "5432:5432"
+    volumes:
+      - salao-data:/var/lib/postgresql/data
+volumes:
+  salao-data:

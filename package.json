@@ -1,0 +1,10 @@
+{
+  "name": "salao-sistema",
+  "private": true,
+  "workspaces": ["shared", "api", "frontend"],
+  "scripts": {
+    "dev:api": "npm run dev -w api",
+    "dev:front": "npm run dev -w frontend",
+    "build": "npm run build -w api && npm run build -w frontend"
+  }
+}
