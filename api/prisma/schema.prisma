@@ -1,4 +1,6 @@
-// Schema do Prisma — as tabelas do salão entram aqui no próximo passo.
+// Schema do Prisma — Salão de beleza
+// Agendamento aponta para Cliente, Profissional e Serviço (3 chaves estrangeiras).
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,4 +8,60 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// Quem entra no sistema (login). Não conta nas 4 tabelas do negócio.
+model Usuario {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  email    String   @unique
+  senha    String // guardada com hash do bcrypt, nunca em texto puro
+  criadoEm DateTime @default(now())
+
+  @@map("usuarios")
+}
+
+model Cliente {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  telefone     String
+  email        String        @unique
+  agendamentos Agendamento[]
+
+  @@map("clientes")
+}
+
+model Profissional {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  especialidade String
+  agendamentos Agendamento[]
+
+  @@map("profissionais")
+}
+
+model Servico {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  preco        Float
+  duracaoMin   Int
+  agendamentos Agendamento[]
+
+  @@map("servicos")
+}
+
+model Agendamento {
+  id             Int      @id @default(autoincrement())
+  dataHora       DateTime
+  status         String   @default("AGENDADO")
+  observacoes    String?
+  clienteId      Int
+  profissionalId Int
+  servicoId      Int
+
+  cliente      Cliente      @relation(fields: [clienteId], references: [id])
+  profissional Profissional @relation(fields: [profissionalId], references: [id])
+  servico      Servico      @relation(fields: [servicoId], references: [id])
+
+  @@map("agendamentos")
 }
