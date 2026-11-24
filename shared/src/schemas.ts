@@ -1,5 +1,16 @@
 import { z } from "zod";
 
+// Mensagens padrão em português para erros de tipo (campo ausente ou do tipo errado).
+// As mensagens específicas de cada campo (abaixo) continuam valendo normalmente.
+z.config({
+  customError: (issue) => {
+    if (issue.code === "invalid_type") {
+      return issue.input === undefined ? "Campo obrigatório" : "Tipo de dado inválido";
+    }
+    return undefined; // nos demais casos, usa a mensagem do próprio campo
+  },
+});
+
 // ---------- Usuário (cadastro e login) ----------
 export const cadastroSchema = z.object({
   nome: z.string().min(2, "Informe o nome (mínimo 2 letras)"),

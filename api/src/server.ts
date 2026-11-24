@@ -1,16 +1,9 @@
 import "dotenv/config";
-import express from "express";
-import cors from "cors";
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
-});
+import { app } from "./app";
 
 const port = Number(process.env.PORT) || 3333;
+
 app.listen(port, () => {
   console.log(`API rodando em http://localhost:${port}`);
+  console.log(`Documentação (Swagger) em http://localhost:${port}/docs`);
 });
