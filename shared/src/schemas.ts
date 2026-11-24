@@ -54,7 +54,7 @@ export const agendamentoSchema = z.object({
     .string()
     .min(1, "Informe a data e a hora")
     .refine((v) => !Number.isNaN(Date.parse(v)), "Data/hora inválida"),
-  status: z.enum(STATUS_AGENDAMENTO, "Status inválido"),
+  status: z.enum(STATUS_AGENDAMENTO, "Status inválido").default("AGENDADO"),
   observacoes: z.string().optional(),
   clienteId: z.number("Escolha o cliente").int().positive("Escolha o cliente"),
   profissionalId: z.number("Escolha o profissional").int().positive("Escolha o profissional"),

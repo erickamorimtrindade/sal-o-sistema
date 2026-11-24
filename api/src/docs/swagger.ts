@@ -1,12 +1,19 @@
 import { z } from "zod";
-import { cadastroSchema, loginSchema, clienteSchema } from "@salao/shared";
+import {
+  cadastroSchema,
+  loginSchema,
+  clienteSchema,
+  profissionalSchema,
+  servicoSchema,
+  agendamentoSchema,
+} from "@salao/shared";
 
 // O Swagger é montado a partir dos MESMOS schemas do Zod usados na validação:
 // se a regra mudar no shared, a documentação muda junto.
 type Json = Record<string, any>;
 
 const paraJson = (schema: z.ZodType): Json => {
-  const { $schema: _ignorar, ...resto } = z.toJSONSchema(schema, { target: "openapi-3.0" }) as Json;
+  const { $schema: _ignorar, ...resto } = z.toJSONSchema(schema, { target: "openapi-3.0", io: "input" }) as Json;
   return resto;
 };
 
@@ -69,11 +76,14 @@ function crud(caminho: string, tag: string, nome: string, entrada: string, saida
 }
 
 const cliente = paraJson(clienteSchema);
+const profissional = paraJson(profissionalSchema);
+const servico = paraJson(servicoSchema);
+const agendamento = paraJson(agendamentoSchema);
 
 export const swaggerSpec: Json = {
   openapi: "3.0.3",
   info: { title: "API do Salão", version: "1.0.0", description: "Sistema de agendamento de um salão de beleza." },
-  tags: [{ name: "Auth" }, { name: "Clientes" }],
+  tags: [{ name: "Auth" }, { name: "Clientes" }, { name: "Profissionais" }, { name: "Serviços" }, { name: "Agendamentos" }],
   paths: {
     "/auth/cadastro": {
       post: {
@@ -92,6 +102,9 @@ export const swaggerSpec: Json = {
       },
     },
     ...crud("/clientes", "Clientes", "clientes", "ClienteEntrada", "Cliente"),
+    ...crud("/profissionais", "Profissionais", "profissionais", "ProfissionalEntrada", "Profissional"),
+    ...crud("/servicos", "Serviços", "serviços", "ServicoEntrada", "Servico"),
+    ...crud("/agendamentos", "Agendamentos", "agendamentos", "AgendamentoEntrada", "Agendamento"),
   },
   components: {
     schemas: {
@@ -115,6 +128,35 @@ export const swaggerSpec: Json = {
       },
       ClienteEntrada: cliente,
       Cliente: comId(cliente),
+      ProfissionalEntrada: profissional,
+      Profissional: comId(profissional),
+      ServicoEntrada: servico,
+      Servico: comId(servico),
+      AgendamentoEntrada: agendamento,
+      // Na saída, o agendamento traz também os dados (nomes) das 3 tabelas ligadas.
+      Agendamento: {
+        type: "object",
+        properties: {
+          id: { type: "integer", example: 1 },
+          dataHora: { type: "string", format: "date-time" },
+          status: { type: "string", enum: ["AGENDADO", "CONCLUIDO", "CANCELADO"] },
+          observacoes: { type: "string", nullable: true },
+          clienteId: { type: "integer" },
+          profissionalId: { type: "integer" },
+          servicoId: { type: "integer" },
+          cliente: { type: "object", properties: { id: { type: "integer" }, nome: { type: "string" } } },
+          profissional: { type: "object", properties: { id: { type: "integer" }, nome: { type: "string" } } },
+          servico: {
+            type: "object",
+            properties: {
+              id: { type: "integer" },
+              nome: { type: "string" },
+              preco: { type: "number" },
+              duracaoMin: { type: "integer" },
+            },
+          },
+        },
+      },
     },
   },
 };
