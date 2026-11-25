@@ -1,5 +1,3 @@
-> 🎥 **Vídeo de apresentação:** COLE_AQUI_O_LINK_DO_VIDEO
-
 # Agenda do Salão
 
 Projeto final de **Desenvolvimento Web A2**.
