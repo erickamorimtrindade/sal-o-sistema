@@ -1,0 +1,103 @@
+:root {
+  --sa-fundo: #f4f6f6;
+  --sa-borda: #e3e8e8;
+  --sa-pinho: #1f6f68;
+  --sa-pinho-escuro: #134642;
+}
+
+body {
+  background: var(--sa-fundo);
+  color: #1b2b2a;
+}
+
+/* ---------- Login e cadastro: painel de marca + formulário ---------- */
+.sa-auth {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  background: #fff;
+}
+.sa-auth-marca {
+  display: none;
+  background: var(--sa-pinho-escuro);
+  color: #fff;
+  padding: 56px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sa-auth-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+@media (min-width: 62em) {
+  .sa-auth {
+    grid-template-columns: minmax(380px, 5fr) 6fr;
+  }
+  .sa-auth-marca {
+    display: flex;
+  }
+}
+
+/* ---------- Indicadores (faixa simples, sem cartões) ---------- */
+.sa-indicadores {
+  display: flex;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--sa-borda);
+  border-radius: var(--mantine-radius-md);
+}
+.sa-indicador {
+  flex: 1 1 140px;
+  padding: 16px 20px;
+  border-right: 1px solid var(--sa-borda);
+}
+.sa-indicador:last-child {
+  border-right: none;
+}
+@media (max-width: 36em) {
+  .sa-indicador {
+    flex-basis: 50%;
+    border-bottom: 1px solid var(--sa-borda);
+  }
+}
+
+/* ---------- Agenda de hoje: linha do tempo ---------- */
+.sa-agenda-item {
+  display: grid;
+  grid-template-columns: 56px 16px 1fr auto;
+  column-gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+}
+.sa-agenda-item + .sa-agenda-item {
+  border-top: 1px solid var(--sa-borda);
+}
+.sa-agenda-hora {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.sa-agenda-ponto {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 5px;
+  border: 3px solid currentColor;
+  background: #fff;
+}
+@media (max-width: 36em) {
+  .sa-agenda-item {
+    grid-template-columns: 48px 14px 1fr;
+  }
+  .sa-agenda-item > :last-child {
+    grid-column: 3;
+  }
+}
+
+/* A marca já aparece na barra superior do celular; no menu lateral só no desktop. */
+@media (max-width: 47.99em) {
+  .sa-marca-desktop {
+    display: none;
+  }
+}
