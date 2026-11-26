@@ -54,6 +54,7 @@ npm install
 
 # 5. criar as tabelas e popular o banco
 cd api
+npx prisma generate
 npx prisma migrate deploy
 npx prisma db seed
 cd ..

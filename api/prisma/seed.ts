@@ -35,14 +35,17 @@ async function main() {
     prisma.servico.create({ data: { nome: "Escova", preco: 60, duracaoMin: 40 } }),
   ]);
 
-  const dia = (d: number, h: number) => new Date(2026, 10, d, h, 0, 0);
+  // datas relativas a hoje, para a Home sempre ter atendimentos
+  const agora = new Date();
+  const dia = (d: number, h: number) =>
+    new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() + d, h, 0, 0);
 
   await prisma.agendamento.createMany({
     data: [
-      { dataHora: dia(25, 9), status: "AGENDADO", clienteId: ana.id, profissionalId: marina.id, servicoId: escova.id },
-      { dataHora: dia(25, 14), status: "AGENDADO", clienteId: bruno.id, profissionalId: joao.id, servicoId: corte.id, observacoes: "Degradê na régua" },
-      { dataHora: dia(26, 10), status: "CONCLUIDO", clienteId: carla.id, profissionalId: marina.id, servicoId: manicure.id },
-      { dataHora: dia(27, 16), status: "CANCELADO", clienteId: ana.id, profissionalId: joao.id, servicoId: corte.id },
+      { dataHora: dia(0, 9), status: "AGENDADO", clienteId: ana.id, profissionalId: marina.id, servicoId: escova.id },
+      { dataHora: dia(0, 14), status: "AGENDADO", clienteId: bruno.id, profissionalId: joao.id, servicoId: corte.id, observacoes: "Degradê na régua" },
+      { dataHora: dia(0, 11), status: "CONCLUIDO", clienteId: carla.id, profissionalId: marina.id, servicoId: manicure.id },
+      { dataHora: dia(1, 16), status: "CANCELADO", clienteId: ana.id, profissionalId: joao.id, servicoId: corte.id },
     ],
   });
 
